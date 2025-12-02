@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { PortfolioPreview } from "@/components/preview/PortfolioPreview";
 import { ResumePreview } from "@/components/preview/ResumePreview";
@@ -18,7 +18,7 @@ type ResumeSharePayload = {
   data: ResumeData;
 };
 
-const SharePage = () => {
+const SharePageInner = () => {
   const params = useSearchParams();
   const encoded = params.get("data");
   const mode = (params.get("mode") as "portfolio" | "resume") ?? "portfolio";
@@ -90,6 +90,20 @@ const SharePage = () => {
         </div>
       </div>
     </main>
+  );
+};
+
+const SharePage = () => {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
+          <p className="text-sm text-white/70">Loading shared preview…</p>
+        </main>
+      }
+    >
+      <SharePageInner />
+    </Suspense>
   );
 };
 

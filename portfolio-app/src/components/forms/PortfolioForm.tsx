@@ -32,13 +32,6 @@ export const PortfolioForm = ({
     onChange({ ...data, [key]: value });
   };
 
-  const updateList = <T extends { id: string }>(
-    listKey: keyof PortfolioData,
-    value: T[]
-  ) => {
-    onChange({ ...data, [listKey]: value as PortfolioData[keyof PortfolioData] });
-  };
-
   const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -58,17 +51,13 @@ export const PortfolioForm = ({
         <button
           type="button"
           className="rounded-full bg-white/10 px-3 py-1 text-xs text-white"
-          onClick={() =>
-            onItemsChange([
-              ...items,
-              {
-                id: nanoid(),
-                ...(Object.fromEntries(
-                  fields.map((field) => [field.key, ""])
-                ) as T),
-              },
-            ])
-          }
+          onClick={() => {
+            const base = Object.fromEntries(
+              fields.map((field) => [field.key, ""])
+            ) as T;
+            const nextItem = { ...base, id: nanoid() } as T;
+            onItemsChange([...items, nextItem]);
+          }}
         >
           + Add
         </button>
@@ -160,7 +149,7 @@ export const PortfolioForm = ({
           { key: "endDate", label: "End" },
           { key: "description", label: "Highlights" },
         ],
-        (items) => updateList("experiences", items)
+        (items) => updateField("experiences", items)
       )}
 
       {renderListSection<EducationItem>(
@@ -173,7 +162,7 @@ export const PortfolioForm = ({
           { key: "endDate", label: "End" },
           { key: "details", label: "Details" },
         ],
-        (items) => updateList("education", items)
+        (items) => updateField("education", items)
       )}
 
       <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
@@ -212,7 +201,7 @@ export const PortfolioForm = ({
           { key: "summary", label: "Summary" },
           { key: "link", label: "Link" },
         ],
-        (items) => updateList("projects", items)
+        (items) => updateField("projects", items)
       )}
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -249,7 +238,7 @@ export const PortfolioForm = ({
           { key: "label", label: "Label" },
           { key: "url", label: "URL" },
         ],
-        (items) => updateList("socials", items)
+        (items) => updateField("socials", items)
       )}
 
       {renderListSection<CertificationItem>(
@@ -260,7 +249,7 @@ export const PortfolioForm = ({
           { key: "issuer", label: "Issuer" },
           { key: "year", label: "Year" },
         ],
-        (items) => updateList("certifications", items)
+        (items) => updateField("certifications", items)
       )}
     </form>
   );

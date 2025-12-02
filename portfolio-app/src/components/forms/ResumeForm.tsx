@@ -39,11 +39,11 @@ export const ResumeForm = ({ data, onChange }: ResumeFormProps) => {
     });
   };
 
-  const updateList = <T extends { id: string }>(
-    key: keyof ResumeData,
-    items: T[]
-  ) => {
-    onChange({ ...data, [key]: items as ResumeData[keyof ResumeData] });
+  const updateList = (key: keyof ResumeData, items: { id: string }[]) => {
+    onChange({
+      ...data,
+      [key]: items as ResumeData[keyof ResumeData],
+    });
   };
 
   const renderSimpleList = (
@@ -95,10 +95,10 @@ export const ResumeForm = ({ data, onChange }: ResumeFormProps) => {
               [
                 ...items,
                 {
-                  id: nanoid(),
                   ...(Object.fromEntries(
                     fields.map((field) => [field.key, ""])
-                  ) as T),
+                  ) as { id: string }),
+                  id: nanoid(),
                 },
               ]
             )

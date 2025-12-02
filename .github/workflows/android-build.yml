@@ -32,25 +32,39 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
+
       - name: Install Android SDK command-line tools and platforms
         working-directory: portfolio-app
         run: |
-          set -e
+          set -euo pipefail
+          set -x
+
           ANDROID_SDK_ROOT="$HOME/android-sdk"
           mkdir -p "$ANDROID_SDK_ROOT"
+
           # Download command line tools (update URL if Google updates)
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-110-8512546_latest.zip -O /tmp/cmdline-tools.zip
           unzip -q /tmp/cmdline-tools.zip -d "$ANDROID_SDK_ROOT"
+
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-          mv "$ANDROID_SDK_ROOT"/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/" || true
+          mv "$ANDROID_SDK_ROOT"/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+
+          # Make sdkmanager available for this run
           export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
-          # Accept licenses
-          yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses >/dev/null || true
-          # Install the platform and build-tools that match your project's compileSdkVersion
-          # Adjust 33 / 33.0.2 to match android/app/build.gradle compileSdkVersion / buildToolsVersion if different.
+
+          # Persist environment for subsequent workflow steps
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH" >> "$GITHUB_ENV"
+
+          # Accept licenses (do not silence errors)
+          yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
+
+          # Install platform/tools/build-tools matching your project
           sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-33" "build-tools;33.0.2"
         env:
-          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64 
+       
 
       - name: Make gradlew executable
         working-directory: portfolio-app/android
@@ -58,7 +72,7 @@ jobs:
 
       - name: Build Android debug APK
         working-directory: portfolio-app/android
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4

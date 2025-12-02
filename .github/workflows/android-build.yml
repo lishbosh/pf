@@ -32,6 +32,10 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
+      - name: Make gradlew executable
+        working-directory: portfolio-app/android
+        run: chmod +x gradlew
+
       - name: Build Android debug APK
         working-directory: portfolio-app/android
         run: ./gradlew assembleDebug

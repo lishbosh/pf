@@ -32,7 +32,6 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-
       - name: Install Android SDK command-line tools and platforms
         working-directory: portfolio-app
         run: |
@@ -42,11 +41,34 @@ jobs:
           ANDROID_SDK_ROOT="$HOME/android-sdk"
           mkdir -p "$ANDROID_SDK_ROOT"
 
-          # Download command line tools (update URL if Google updates)
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-110-8512546_latest.zip -O /tmp/cmdline-tools.zip
-          unzip -q /tmp/cmdline-tools.zip -d "$ANDROID_SDK_ROOT"
+          # Ensure unzip is available
+          if ! command -v unzip >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y unzip
+          fi
+
+          # Download command line tools (use latest symlink)
+          CMDLINE_ZIP=/tmp/cmdline-tools.zip
+          CMDLINE_URL="https://dl.google.com/android/repository/commandlinetools-linux-latest.zip"
+
+          # Retry download up to 3 times
+          n=0
+          until [ $n -ge 3 ]
+          do
+            curl -fSL "$CMDLINE_URL" -o "$CMDLINE_ZIP" && break
+            n=$((n+1))
+            echo "Download failed, retry #$n..."
+            sleep $((n * 5))
+          done
+          if [ ! -s "$CMDLINE_ZIP" ]; then
+            echo "Failed to download Android command line tools from $CMDLINE_URL"
+            exit 1
+          fi
+
+          unzip -q "$CMDLINE_ZIP" -d "$ANDROID_SDK_ROOT"
 
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+          # The zip contains a top-level "cmdline-tools" directory, move its children to "latest"
           mv "$ANDROID_SDK_ROOT"/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
 
           # Make sdkmanager available for this run
@@ -55,16 +77,28 @@ jobs:
           # Persist environment for subsequent workflow steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          # Append to existing PATH in the environment file to avoid overwriting
           echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH" >> "$GITHUB_ENV"
 
-          # Accept licenses (do not silence errors)
+          # Accept licenses (do not silence errors) - ensure JAVA_HOME is available in env below
           yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
 
-          # Install platform/tools/build-tools matching your project
-          sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          # Install platform/tools/build-tools matching your project and retry on transient errors
+          retry() {
+            local i=0
+            local max=3
+            until [ $i -ge $max ]; do
+              "$@" && return 0
+              i=$((i+1))
+              echo "Command failed, retrying ($i/$max)..."
+              sleep $((i * 5))
+            done
+            return 1
+          }
+
+          retry sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-33" "build-tools;33.0.2"
         env:
-          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64 
-       
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
 
       - name: Make gradlew executable
         working-directory: portfolio-app/android

@@ -49,7 +49,7 @@ jobs:
 
           # Download command line tools (use latest symlink)
           CMDLINE_ZIP=/tmp/cmdline-tools.zip
-          CMDLINE_URL="https://dl.google.com/android/repository/commandlinetools-linux-latest.zip"
+          CMDLINE_URL="https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
 
           # Retry download up to 3 times
           n=0

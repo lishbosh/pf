@@ -1,0 +1,247 @@
+Goal: Build a fully responsive Android portfolio & resume builder app using Cursor + Qoder + web technologies (HTML/CSS/JS/React or Flutterflow-style).
+
+1. Product Overview
+
+A mobile application that allows users to:
+
+Choose from 10 portfolio templates
+
+Choose from 10 trending resume templates
+
+Fill all fields (education, experience, skills, projects, certifications, etc.)
+
+View live preview inside the app
+
+Save data using local storage
+
+Export as PDF
+
+Download PDF
+
+Generate shareable link for portfolio
+
+100% responsive UI (mobile-first)
+
+Works offline
+
+Generate APK inside Cursor
+
+2. Core Modules
+2.1 Portfolio Module
+
+10 unique portfolio templates
+
+Fields:
+
+Name
+
+Title
+
+About
+
+Experience list
+
+Education list
+
+Skills
+
+Projects
+
+Contact info
+
+Social links
+
+Profile photo upload
+
+Live Preview
+
+Save data locally
+
+Export as PDF
+
+Share link (local server or dynamic URL)
+
+2.2 Resume Module
+
+10 modern resume templates
+
+Fields:
+
+Personal info
+
+Summary
+
+Skills
+
+Work experience
+
+Education
+
+Certifications
+
+Languages
+
+Hobbies
+
+Photo optional
+
+Preview in app
+
+Save data
+
+PDF export
+
+Download PDF
+
+3. Additional Features
+
+In-app Tutorial / Guide
+
+Example Portfolio included
+
+Reminders to update portfolio/resume
+
+Works offline
+
+No pricing, no payments
+
+4. App Screens
+
+Splash Screen
+
+Home Dashboard (Portfolio / Resume)
+
+Template Selection (10 each)
+
+Form Input Screen
+
+Live Preview Screen
+
+PDF Export Screen
+
+Share Portfolio Page
+
+Settings / Local Backup
+
+5. Technical Requirements (Cursor Friendly)
+Frontend Options
+
+You can use:
+
+✔ React + Tailwind
+✔ Next.js (recommended)
+✔ Vanilla HTML/CSS/JS
+✔ Or Qoder blocks inside Cursor editor
+
+Backend (if needed)
+
+Optional — since app uses local storage, no backend required.
+
+Storage
+
+localStorage for all forms
+
+Optionally use IndexedDB for saving uploaded images
+
+PDF Generation
+
+Use:
+
+html2pdf.js
+
+OR jspdf + html2canvas
+
+Shareable Link Creation
+
+Two options:
+
+Run app locally → share.html?portfolioID=xxx
+
+Free hosting → GitHub Pages / Netlify / Vercel
+
+Cursor builds APK using Capacitor or Cordova
+
+6. APK Build Requirements (Cursor Workflow)
+
+Inside Cursor:
+
+Step 1: Install Capacitor
+npm install @capacitor/core @capacitor/cli
+npx cap init portfolio-app com.myportfolio.app
+
+Step 2: Build Web App
+npm run build
+
+Step 3: Copy Files Into Android
+npx cap add android
+npx cap copy
+npx cap open android
+
+Step 4: Build APK Inside Android Studio
+
+Build → Build Bundle(s) / APK(s) → APK
+
+This creates a real Android APK for your app.
+
+7. Folder Structure (For Cursor)
+/project-root
+  /public
+  /src
+    /components
+        Template1.jsx
+        Template2.jsx
+        ...
+    /templates
+        resume1.jsx
+        resume2.jsx
+        ...
+    /pages
+        index.jsx
+        portfolio.jsx
+        resume.jsx
+        preview.jsx
+        settings.jsx
+    /utils
+        pdf.js
+        storage.js
+  package.json
+  capacitor.config.json
+  README.md
+
+8. UI/UX Guidelines
+
+Fully responsive (mobile-first)
+
+Grid-based layouts
+
+Lightweight animations
+
+Dark + Light mode
+
+Easy navigation
+
+Templates must look professional
+
+9. Testing Requirements
+
+Template responsiveness testing
+
+PDF correctness testing
+
+Local storage works offline
+
+APK opens without crashes
+
+All fields save and load properly
+
+No layout breaking
+
+10. Deliverables
+
+Full Source Code (Cursor Workspace)
+
+Web App Build (dist folder)
+
+Android APK (final output)
+
+Documentation

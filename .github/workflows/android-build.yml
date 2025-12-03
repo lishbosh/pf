@@ -39,6 +39,10 @@ jobs:
         working-directory: portfolio-app/android
         run: chmod +x ./gradlew
 
+      - name: Copy web assets to Android
+        working-directory: portfolio-app
+        run: npx cap copy android
+
       - name: Build Android debug APK
         working-directory: portfolio-app/android
         run: ./gradlew assembleDebug

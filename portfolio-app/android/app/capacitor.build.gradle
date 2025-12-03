@@ -7,33 +7,12 @@ android {
   }
 }
 
-// Robust approach to include cordova.variables.gradle
-// First try the standard project reference
-try {
-    if (findProject(':capacitor-cordova-android-plugins')) {
-        apply from: project(':capacitor-cordova-android-plugins').file('cordova.variables.gradle')
-    } else {
-        // If that fails, try direct file reference with multiple fallbacks
-        def cordovaVariablesFile = new File(projectDir, "../capacitor-cordova-android-plugins/cordova.variables.gradle")
-        if (cordovaVariablesFile.exists()) {
-            apply from: cordovaVariablesFile
-        } else {
-            // Try alternative path
-            cordovaVariablesFile = new File(rootDir, "capacitor-cordova-android-plugins/cordova.variables.gradle")
-            if (cordovaVariablesFile.exists()) {
-                apply from: cordovaVariablesFile
-            } else {
-                // Log warning but don't fail the build
-                logger.warn("Could not find cordova.variables.gradle file at expected locations")
-            }
-        }
-    }
-} catch (Exception e) {
-    logger.warn("Failed to apply cordova.variables.gradle: ${e.message}")
+apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
+dependencies {
+
+
 }
 
-dependencies {
-}
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

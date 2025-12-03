@@ -27,7 +27,7 @@ jobs:
         run: npm run build:mobile
 
       - name: Set up Android SDK
-        uses: r0adkll/setup-android@v1
+        uses: r0adkll/setup-android@v2
         with:
           sdk-version: "34"
           build-tools-version: "34.0.0"

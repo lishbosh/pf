@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.out/
+.next/
+dist/
+build/
+
+# Environment files
+.env*
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Script files (we don't want to commit our resize script)
+resize-icons.js

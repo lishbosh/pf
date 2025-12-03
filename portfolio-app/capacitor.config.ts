@@ -5,7 +5,13 @@ const config: CapacitorConfig = {
   appName: 'portfolio-app',
   webDir: 'out',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'https',
+    hostname: 'localhost',
+    iosScheme: 'https',
+    cleartext: false
+  },
+  android: {
+    webContentsDebuggingEnabled: true
   }
 };
 

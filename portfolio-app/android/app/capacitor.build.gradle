@@ -7,13 +7,16 @@ android {
   }
 }
 
-// Use project reference for better cross-environment compatibility
-apply from: project(':capacitor-cordova-android-plugins').file('cordova.variables.gradle')
-dependencies {
-
-
+// Use project reference with fallback for cross-environment compatibility
+if (findProject(':capacitor-cordova-android-plugins')) {
+    apply from: project(':capacitor-cordova-android-plugins').file('cordova.variables.gradle')
+} else {
+    // Fallback to file-based approach if project reference is not available
+    apply from: new File(projectDir, "../capacitor-cordova-android-plugins/cordova.variables.gradle")
 }
 
+dependencies {
+}
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

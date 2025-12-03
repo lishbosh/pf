@@ -24,3 +24,17 @@ Thumbs.db
 
 # Script files (we don't want to commit our resize script)
 resize-icons.js
+
+# Package files
+package-lock.json
+package.json
+
+# Image files
+icon.png
+
+# Package files
+package-lock.json
+package.json
+
+# Image files
+icon.png

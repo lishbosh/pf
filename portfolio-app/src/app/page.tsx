@@ -229,8 +229,8 @@ export default function Home() {
                     <p className="text-sm font-semibold">Live preview</p>
                     <p className="text-xs text-white/60">
                       Updates as you type. Export-ready.
-                    </p>
-                  </div>
+          </p>
+        </div>
                   <div className="flex flex-wrap gap-2">
                     <button
                       className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-900"

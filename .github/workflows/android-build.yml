@@ -26,22 +26,15 @@ jobs:
         working-directory: portfolio-app
         run: npm run build:mobile
 
-        uses: malinskiy/action-android/install-sdk@release/0.1.4
-
->>>>>>> 5e863f6047fdfc16c0b00c2a7fb7eccfbdc17081
       - name: Set up Android SDK
         uses: malinskiy/action-android/install-sdk@release/0.1.4
-=======
-        uses: malinskiy/action-android/install-sdk@release/0.1.4
-
->>>>>>> 5e863f6047fdfc16c0b00c2a7fb7eccfbdc17081
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
-          
+
       - name: Make gradlew executable
         working-directory: portfolio-app/android
         run: chmod +x ./gradlew
@@ -50,13 +43,8 @@ jobs:
         working-directory: portfolio-app/android
         run: ./gradlew assembleDebug
 
-          path: portfolio-app/android/app/build/outputs/apk/debug/app-debug.apk
->>>>>>> 5e863f6047fdfc16c0b00c2a7fb7eccfbdc17081
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: portfolio-debug-apk
           path: portfolio-app/android/app/build/outputs/apk/debug/app-debug.apk
-=======
-          path: portfolio-app/android/app/build/outputs/apk/debug/app-debug.apk
->>>>>>> 5e863f6047fdfc16c0b00c2a7fb7eccfbdc17081

@@ -9,14 +9,7 @@ const config: CapacitorConfig = {
     hostname: 'localhost',
     iosScheme: 'https',
     cleartext: false,
-    url: 'index.html'  // Explicitly load local index.html
-  },
-  android: {
-    webContentsDebuggingEnabled: true
-  }
-};
-
-export default config; // Explicitly load local index.html
+    url: 'index.html'
   },
   android: {
     webContentsDebuggingEnabled: true

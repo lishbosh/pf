@@ -7,7 +7,8 @@ android {
   }
 }
 
-apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
+// Use a more robust way to reference the cordova.variables.gradle file
+apply from: file("$rootDir/capacitor-cordova-android-plugins/cordova.variables.gradle")
 dependencies {
 
 

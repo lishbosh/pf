@@ -7,8 +7,8 @@ android {
   }
 }
 
-// Use a relative path that works in both local and CI environments
-apply from: new File(projectDir, "../capacitor-cordova-android-plugins/cordova.variables.gradle")
+// Use project reference for better cross-environment compatibility
+apply from: project(':capacitor-cordova-android-plugins').file('cordova.variables.gradle')
 dependencies {
 
 

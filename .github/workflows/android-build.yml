@@ -24,7 +24,7 @@ jobs:
 
       - name: Build web app
         working-directory: portfolio-app
-        run: npm run build:mobile
+        run: npm run build
 
       - name: Set up Android SDK
         uses: malinskiy/action-android/install-sdk@release/0.1.4
@@ -41,7 +41,10 @@ jobs:
 
       - name: Copy web assets to Android
         working-directory: portfolio-app
-        run: npx cap copy android
+        run: |
+          ls -la out/
+          npx cap copy android
+          ls -la android/app/src/main/assets/public/
 
       - name: Build Android debug APK
         working-directory: portfolio-app/android

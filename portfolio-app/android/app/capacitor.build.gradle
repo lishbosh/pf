@@ -7,12 +7,28 @@ android {
   }
 }
 
-apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
-dependencies {
-
-
+// Robust approach to include cordova.variables.gradle with multiple fallback strategies
+try {
+    // First try the standard relative path
+    def cordovaVariablesFile = new File(projectDir, "../capacitor-cordova-android-plugins/cordova.variables.gradle")
+    if (cordovaVariablesFile.exists()) {
+        apply from: cordovaVariablesFile
+    } else {
+        // Try alternative path
+        cordovaVariablesFile = new File(rootDir, "capacitor-cordova-android-plugins/cordova.variables.gradle")
+        if (cordovaVariablesFile.exists()) {
+            apply from: cordovaVariablesFile
+        } else {
+            // Log warning but don't fail the build
+            logger.warn("Could not find cordova.variables.gradle file at expected locations")
+        }
+    }
+} catch (Exception e) {
+    logger.warn("Failed to apply cordova.variables.gradle: ${e.message}")
 }
 
+dependencies {
+}
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

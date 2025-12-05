@@ -12,6 +12,7 @@ export default function PrintPage() {
   const params = useSearchParams();
   const [data, setData] = useState<{mode: string; payload: any} | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
@@ -20,6 +21,7 @@ export default function PrintPage() {
       
       if (!encoded) {
         setError("No data provided for printing");
+        setLoading(false);
         return;
       }
 
@@ -32,15 +34,28 @@ export default function PrintPage() {
         payload: parsed
       });
       
+      setLoading(false);
+      
       // Automatically trigger print after a short delay
       setTimeout(() => {
-        window.print();
+        if (typeof window !== 'undefined') {
+          window.print();
+        }
       }, 1000);
     } catch (err) {
       console.error("Print page error:", err);
       setError("Failed to load print data");
+      setLoading(false);
     }
   }, [params]);
+
+  if (loading) {
+    return (
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <p style={{ color: '#374151' }}>Loading print preview...</p>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -54,7 +69,7 @@ export default function PrintPage() {
   if (!data) {
     return (
       <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <p style={{ color: '#374151' }}>Loading print preview...</p>
+        <p style={{ color: '#374151' }}>No data available for printing</p>
       </div>
     );
   }
@@ -106,3 +121,6 @@ export default function PrintPage() {
     </div>
   );
 }
+
+// Add dynamic export to prevent prerendering
+export const dynamic = "force-dynamic";

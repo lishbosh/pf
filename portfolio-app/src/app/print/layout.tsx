@@ -13,7 +13,6 @@ export default function PrintLayout({
   return (
     <html>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <style>
           {`
             body {
@@ -53,4 +52,11 @@ export default function PrintLayout({
       </body>
     </html>
   );
+}
+
+export function generateViewport() {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+  };
 }

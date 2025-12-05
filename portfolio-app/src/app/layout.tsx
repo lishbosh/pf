@@ -16,7 +16,6 @@ export const metadata: Metadata = {
   title: "Portfolio Launchpad",
   description:
     "Build modern portfolios & resumes with live preview, PDF export, and offline support.",
-  viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
 };
 
 export default function RootLayout({
@@ -33,4 +32,11 @@ export default function RootLayout({
       </body>
     </html>
   );
+}
+
+export function generateViewport() {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+  };
 }

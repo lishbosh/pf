@@ -6,13 +6,11 @@ import { PortfolioPreview } from "@/components/preview/PortfolioPreview";
 import { ResumePreview } from "@/components/preview/ResumePreview";
 import { ProfessionalWhiteResumePreview } from "@/components/preview/ProfessionalWhiteResumePreview";
 import { portfolioTemplates, resumeTemplates } from "@/data/templates";
-import { PortfolioData, ResumeData } from "@/types/forms";
 
 export default function PrintPage() {
   const params = useSearchParams();
   const [data, setData] = useState<{mode: string; payload: any} | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
@@ -21,7 +19,6 @@ export default function PrintPage() {
       
       if (!encoded) {
         setError("No data provided for printing");
-        setLoading(false);
         return;
       }
 
@@ -34,8 +31,6 @@ export default function PrintPage() {
         payload: parsed
       });
       
-      setLoading(false);
-      
       // Automatically trigger print after a short delay
       setTimeout(() => {
         if (typeof window !== 'undefined') {
@@ -45,17 +40,8 @@ export default function PrintPage() {
     } catch (err) {
       console.error("Print page error:", err);
       setError("Failed to load print data");
-      setLoading(false);
     }
   }, [params]);
-
-  if (loading) {
-    return (
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <p style={{ color: '#374151' }}>Loading print preview...</p>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -67,11 +53,7 @@ export default function PrintPage() {
   }
 
   if (!data) {
-    return (
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <p style={{ color: '#374151' }}>No data available for printing</p>
-      </div>
-    );
+    return null; // Let the loading component handle this
   }
 
   const renderPreview = () => {

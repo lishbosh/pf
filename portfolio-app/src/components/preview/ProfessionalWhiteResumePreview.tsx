@@ -45,7 +45,7 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
 
       <div style={{ marginTop: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem' }}>
         {/* Left Column - Skills, Education, Certifications */}
-        <div style={{ spaceY: '1.5rem' }}>
+        <div>
           {/* Skills */}
           <section>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>SKILLS</h2>
@@ -59,11 +59,11 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
           </section>
 
           {/* Education */}
-          <section>
+          <section style={{ marginTop: '1.5rem' }}>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>EDUCATION</h2>
-            <div style={{ marginTop: '0.5rem', spaceY: '0.75rem' }}>
+            <div style={{ marginTop: '0.5rem' }}>
               {data.education.map((edu) => (
-                <div key={edu.id}>
+                <div key={edu.id} style={{ marginTop: '0.75rem' }}>
                   <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0f172a' }}>{edu.degree}</p>
                   <p style={{ fontSize: '0.75rem', color: '#64748b' }}>{edu.school}</p>
                   <p style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -79,11 +79,11 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
 
           {/* Certifications */}
           {data.certifications.length > 0 && (
-            <section>
+            <section style={{ marginTop: '1.5rem' }}>
               <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>CERTIFICATIONS</h2>
-              <ul style={{ marginTop: '0.5rem', spaceY: '0.25rem' }}>
+              <ul style={{ marginTop: '0.5rem', paddingLeft: '1.25rem' }}>
                 {data.certifications.map((cert) => (
-                  <li key={cert.id} style={{ fontSize: '0.875rem', color: '#334155' }}>
+                  <li key={cert.id} style={{ fontSize: '0.875rem', color: '#334155', marginTop: '0.25rem' }}>
                     <span style={{ fontWeight: '600' }}>{cert.name}</span> - {cert.issuer} ({cert.year})
                   </li>
                 ))}
@@ -93,7 +93,7 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
 
           {/* Languages */}
           {data.languages.length > 0 && (
-            <section>
+            <section style={{ marginTop: '1.5rem' }}>
               <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>LANGUAGES</h2>
               <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#334155' }}>{data.languages.join(", ")}</p>
             </section>
@@ -104,9 +104,9 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
         <div>
           <section>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>PROFESSIONAL EXPERIENCE</h2>
-            <div style={{ marginTop: '0.5rem', spaceY: '1rem' }}>
+            <div style={{ marginTop: '0.5rem' }}>
               {data.experiences.map((experience) => (
-                <div key={experience.id}>
+                <div key={experience.id} style={{ marginTop: '1rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <p style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#0f172a' }}>{experience.role}</p>
                     <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
@@ -114,10 +114,9 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
                     </p>
                   </div>
                   <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#2563eb' }}>{experience.company}</p>
-                  <ul style={{ marginTop: '0.25rem', spaceY: '0.25rem' }}>
+                  <ul style={{ marginTop: '0.25rem', paddingLeft: '1.25rem' }}>
                     {experience.description.split('\n').map((line, index) => (
-                      <li key={index} style={{ fontSize: '0.875rem', color: '#334155', display: 'flex' }}>
-                        <span style={{ marginRight: '0.5rem' }}>•</span>
+                      <li key={index} style={{ fontSize: '0.875rem', color: '#334155', marginTop: '0.25rem' }}>
                         <span>{line}</span>
                       </li>
                     ))}

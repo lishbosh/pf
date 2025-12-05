@@ -10,8 +10,8 @@ type ProfessionalWhiteResumePreviewProps = {
 export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalWhiteResumePreviewProps) => {
   return (
     <div 
-      className="w-full bg-white p-8 text-slate-900 print:p-0 print:m-0"
-      style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
+      className="w-full bg-white p-8 text-slate-900 print:p-8 print:m-0"
+      style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '100%', margin: '0 auto' }}
     >
       {/* Header */}
       <header className="border-b border-gray-300 pb-4 print:border-b print:border-gray-300">
@@ -42,9 +42,9 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
           {/* Skills */}
           <section>
             <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">SKILLS</h2>
-            <div className="mt-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               {data.skills.map((skill, index) => (
-                <span key={index} className="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 mr-2 mb-2 rounded print:text-xs print:px-2 print:py-1">
+                <span key={index} className="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded print:text-xs print:px-2 print:py-1">
                   {skill}
                 </span>
               ))}

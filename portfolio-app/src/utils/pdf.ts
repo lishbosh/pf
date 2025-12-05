@@ -5,63 +5,65 @@ export const exportSectionAsPdf = async (
   containerId: string,
   filename: string
 ) => {
-  const node = document.getElementById(containerId);
-  if (!node) {
+  const element = document.getElementById(containerId);
+  if (!element) {
     throw new Error("Preview section not found");
   }
 
-  // Clone the node to avoid modifying the original
-  const clone = node.cloneNode(true) as HTMLElement;
-  clone.style.position = "absolute";
-  clone.style.left = "-9999px";
-  clone.style.width = "210mm"; // A4 width
-  clone.style.minHeight = "297mm"; // A4 height
-  clone.style.padding = "20mm";
-  clone.style.margin = "0";
-  clone.style.boxShadow = "none";
-  clone.style.borderRadius = "0";
-  
-  // Remove background colors for clean PDF
-  clone.style.backgroundColor = "#ffffff";
-  
-  // Append to body temporarily
-  document.body.appendChild(clone);
-
   try {
-    const canvas = await html2canvas(clone, {
+    // Create a temporary full-width container for better PDF rendering
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.width = '210mm'; // A4 width
+    tempContainer.style.minHeight = '297mm';
+    tempContainer.style.padding = '20mm';
+    tempContainer.style.backgroundColor = '#ffffff';
+    tempContainer.style.boxShadow = 'none';
+    
+    // Clone the content
+    const clonedContent = element.cloneNode(true) as HTMLElement;
+    
+    // Remove unnecessary styling for PDF
+    clonedContent.style.borderRadius = '0';
+    clonedContent.style.boxShadow = 'none';
+    clonedContent.style.transform = 'none';
+    
+    tempContainer.appendChild(clonedContent);
+    document.body.appendChild(tempContainer);
+
+    // Wait a bit for styles to apply
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const canvas = await html2canvas(tempContainer, {
       scale: 2,
-      backgroundColor: "#ffffff",
       useCORS: true,
+      backgroundColor: "#ffffff",
       logging: false,
     });
-    
+
     const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    
-    // Calculate dimensions to fit the page
-    const imgWidth = 210; // A4 width in mm
-    const pageHeight = 297; // A4 height in mm
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4"
+    });
+
+    // Calculate image dimensions
+    const imgWidth = 210 - 20; // A4 width minus margins
+    const pageHeight = 297;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     
-    let heightLeft = imgHeight;
-    let position = 0;
+    // Add image to PDF
+    pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
     
-    // Add first page
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-    
-    // Add additional pages if needed
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-    
-    // Save the PDF
+    // Save PDF
     pdf.save(filename);
-  } finally {
+    
     // Clean up
-    document.body.removeChild(clone);
+    document.body.removeChild(tempContainer);
+  } catch (error) {
+    console.error("PDF export error:", error);
+    throw new Error("Failed to export PDF. Please try again.");
   }
 };

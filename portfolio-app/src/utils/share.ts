@@ -5,26 +5,55 @@ export type SharePayload<T> = {
 };
 
 export const encodeSharePayload = <T>(data: T) => {
-  const payload: SharePayload<T> = {
-    version: 1,
-    timestamp: Date.now(),
-    data,
-  };
-  const json = JSON.stringify(payload);
-  return typeof window === "undefined"
-    ? Buffer.from(json).toString("base64url")
-    : btoa(json);
+  try {
+    const payload: SharePayload<T> = {
+      version: 1,
+      timestamp: Date.now(),
+      data,
+    };
+    const json = JSON.stringify(payload);
+    
+    // Use URL-safe base64 encoding
+    if (typeof window === "undefined") {
+      // Server-side
+      return Buffer.from(json).toString("base64url");
+    } else {
+      // Client-side
+      return btoa(encodeURIComponent(json))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+    }
+  } catch (error) {
+    console.error("Encoding error:", error);
+    throw new Error("Failed to encode data");
+  }
 };
 
 export const decodeSharePayload = <T>(encoded: string): SharePayload<T> => {
   try {
-    const decoded =
-      typeof window === "undefined"
-        ? Buffer.from(encoded, "base64url").toString()
-        : atob(encoded);
-    return JSON.parse(decoded) as SharePayload<T>;
+    let json: string;
+    
+    if (typeof window === "undefined") {
+      // Server-side
+      json = Buffer.from(encoded, "base64url").toString();
+    } else {
+      // Client-side - reverse the URL-safe encoding
+      let base64 = encoded
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+      
+      // Add padding if needed
+      while (base64.length % 4) {
+        base64 += '=';
+      }
+      
+      json = decodeURIComponent(atob(base64));
+    }
+    
+    return JSON.parse(json) as SharePayload<T>;
   } catch (error) {
-    console.error("Failed to decode share payload:", error);
+    console.error("Decoding error:", error);
     throw new Error("Invalid share payload");
   }
 };
@@ -34,19 +63,20 @@ export const buildShareUrl = (
   encodedPayload: string,
   extraParams?: Record<string, string>
 ) => {
-  if (typeof window === "undefined") return encodedPayload;
   try {
-    const origin = window.location.origin;
+    const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
     const url = new URL(path, origin);
     url.searchParams.set("data", encodedPayload);
+    
     if (extraParams) {
       Object.entries(extraParams).forEach(([key, value]) => {
         url.searchParams.set(key, value);
       });
     }
+    
     return url.toString();
   } catch (error) {
-    console.error("Failed to build share URL:", error);
+    console.error("URL building error:", error);
     throw new Error("Failed to create share link");
   }
 };

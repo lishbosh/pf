@@ -122,7 +122,7 @@ export default function Home() {
       setShareUrl(url);
     } catch (error) {
       console.error("Share failed:", error);
-      alert("Failed to create share link. Please try again.");
+      alert("Failed to create share link. Please make sure all fields are filled correctly and try again.");
     }
   };
 
@@ -136,7 +136,7 @@ export default function Home() {
       );
     } catch (error) {
       console.error("Export failed:", error);
-      alert("Failed to export PDF. Please try again.");
+      alert("Failed to export PDF. Please make sure all fields are filled correctly and try again.");
     }
   };
 

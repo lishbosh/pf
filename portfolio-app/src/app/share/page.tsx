@@ -33,17 +33,19 @@ const SharePageInner = () => {
         return { payload: decodeSharePayload<PortfolioSharePayload>(encoded) };
       }
       return { payload: decodeSharePayload<ResumeSharePayload>(encoded) };
-    } catch {
-      return { error: "Unable to decode shared data" };
+    } catch (err) {
+      console.error("Decode error:", err);
+      return { error: "Unable to decode shared data. The link may be invalid or corrupted." };
     }
   }, [encoded, mode]);
 
   if (error || !payload) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-white text-slate-900">
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
-          <p className="text-lg font-semibold text-red-600">{error}</p>
-          <p className="text-sm text-gray-600 mt-2">Ask the sender for a fresh link.</p>
+        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm max-w-md w-full mx-4">
+          <p className="text-lg font-semibold text-red-600">Error</p>
+          <p className="text-sm text-gray-600 mt-2">{error}</p>
+          <p className="text-xs text-gray-500 mt-4">Ask the sender for a fresh link.</p>
         </div>
       </main>
     );
@@ -59,7 +61,7 @@ const SharePageInner = () => {
           (t) => t.id === portfolioPayload.data.templateId
         ) ?? portfolioTemplates[0];
       return (
-        <div className="w-full max-w-4xl mx-auto bg-white p-8">
+        <div className="w-full bg-white">
           <PortfolioPreview
             data={portfolioPayload.data.data}
             template={template}
@@ -75,7 +77,7 @@ const SharePageInner = () => {
     // Use professional white template if selected
     if (template.id === "professional-white") {
       return (
-        <div className="w-full max-w-4xl mx-auto bg-white p-0">
+        <div className="w-full bg-white">
           <ProfessionalWhiteResumePreview 
             data={resumePayload.data.data} 
             template={template} 
@@ -85,15 +87,15 @@ const SharePageInner = () => {
     }
     
     return (
-      <div className="w-full max-w-4xl mx-auto bg-white p-0">
+      <div className="w-full bg-white">
         <ResumePreview data={resumePayload.data.data} template={template} />
       </div>
     );
   };
 
   return (
-    <main className="min-h-screen bg-white py-10 text-slate-900">
-      <div className="mx-auto max-w-4xl px-4">
+    <main className="min-h-screen bg-white py-0 text-slate-900">
+      <div className="w-full px-0">
         {renderSharedPreview()}
       </div>
     </main>

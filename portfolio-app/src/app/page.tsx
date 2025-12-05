@@ -105,29 +105,39 @@ export default function Home() {
       : resumeTemplates.find((t) => t.id === resumeTemplateId) ??
         resumeTemplates[0];
 
-  const handleShare = () => {
-    const payload =
-      mode === "portfolio"
-        ? {
-            templateId: portfolioTemplateId,
-            data: portfolioData,
-          }
-        : {
-            templateId: resumeTemplateId,
-            data: resumeData,
-          };
-    const encoded = encodeSharePayload(payload);
-    const url = buildShareUrl("/share", encoded, { mode });
-    setShareUrl(url);
+  const handleShare = async () => {
+    try {
+      const payload =
+        mode === "portfolio"
+          ? {
+              templateId: portfolioTemplateId,
+              data: portfolioData,
+            }
+          : {
+              templateId: resumeTemplateId,
+              data: resumeData,
+            };
+      const encoded = encodeSharePayload(payload);
+      const url = buildShareUrl("/share", encoded, { mode });
+      setShareUrl(url);
+    } catch (error) {
+      console.error("Share failed:", error);
+      alert("Failed to create share link. Please try again.");
+    }
   };
 
   const handleExport = async () => {
-    const id =
-      mode === "portfolio" ? "portfolio-preview" : "resume-preview";
-    await exportSectionAsPdf(
-      id,
-      mode === "portfolio" ? "portfolio.pdf" : "resume.pdf"
-    );
+    try {
+      const id =
+        mode === "portfolio" ? "portfolio-preview" : "resume-preview";
+      await exportSectionAsPdf(
+        id,
+        mode === "portfolio" ? "portfolio.pdf" : "resume.pdf"
+      );
+    } catch (error) {
+      console.error("Export failed:", error);
+      alert("Failed to export PDF. Please try again.");
+    }
   };
 
   const handlePhotoUpload = async (file: File) => {

@@ -40,10 +40,10 @@ const SharePageInner = () => {
 
   if (error || !payload) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
-          <p className="text-lg font-semibold">{error}</p>
-          <p className="text-sm text-white/70">Ask the sender for a fresh link.</p>
+      <main className="flex min-h-screen items-center justify-center bg-white text-slate-900">
+        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
+          <p className="text-lg font-semibold text-red-600">{error}</p>
+          <p className="text-sm text-gray-600 mt-2">Ask the sender for a fresh link.</p>
         </div>
       </main>
     );
@@ -59,10 +59,12 @@ const SharePageInner = () => {
           (t) => t.id === portfolioPayload.data.templateId
         ) ?? portfolioTemplates[0];
       return (
-        <PortfolioPreview
-          data={portfolioPayload.data.data}
-          template={template}
-        />
+        <div className="w-full max-w-4xl mx-auto bg-white p-8">
+          <PortfolioPreview
+            data={portfolioPayload.data.data}
+            template={template}
+          />
+        </div>
       );
     }
     const resumePayload = payload as { data: ResumeSharePayload };
@@ -73,33 +75,26 @@ const SharePageInner = () => {
     // Use professional white template if selected
     if (template.id === "professional-white") {
       return (
-        <ProfessionalWhiteResumePreview 
-          data={resumePayload.data.data} 
-          template={template} 
-        />
+        <div className="w-full max-w-4xl mx-auto bg-white p-0">
+          <ProfessionalWhiteResumePreview 
+            data={resumePayload.data.data} 
+            template={template} 
+          />
+        </div>
       );
     }
     
     return (
-      <ResumePreview data={resumePayload.data.data} template={template} />
+      <div className="w-full max-w-4xl mx-auto bg-white p-0">
+        <ResumePreview data={resumePayload.data.data} template={template} />
+      </div>
     );
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 py-10 text-white">
-      <div className="mx-auto max-w-4xl space-y-4 px-4">
-        <header className="text-center">
-          <p className="text-xs uppercase tracking-[0.5em] text-white/60">
-            Shared {mode}
-          </p>
-          <h1 className="text-3xl font-semibold">Preview</h1>
-          <p className="text-sm text-white/70">
-            View-only mode. Edit inside the main app.
-          </p>
-        </header>
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-          {renderSharedPreview()}
-        </div>
+    <main className="min-h-screen bg-white py-10 text-slate-900">
+      <div className="mx-auto max-w-4xl px-4">
+        {renderSharedPreview()}
       </div>
     </main>
   );
@@ -109,8 +104,8 @@ const SharePage = () => {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
-          <p className="text-sm text-white/70">Loading shared preview…</p>
+        <main className="flex min-h-screen items-center justify-center bg-white text-slate-900">
+          <p className="text-sm text-gray-600">Loading shared preview…</p>
         </main>
       }
     >

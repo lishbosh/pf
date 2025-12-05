@@ -17,11 +17,16 @@ export const encodeSharePayload = <T>(data: T) => {
 };
 
 export const decodeSharePayload = <T>(encoded: string): SharePayload<T> => {
-  const decoded =
-    typeof window === "undefined"
-      ? Buffer.from(encoded, "base64url").toString()
-      : atob(encoded);
-  return JSON.parse(decoded) as SharePayload<T>;
+  try {
+    const decoded =
+      typeof window === "undefined"
+        ? Buffer.from(encoded, "base64url").toString()
+        : atob(encoded);
+    return JSON.parse(decoded) as SharePayload<T>;
+  } catch (error) {
+    console.error("Failed to decode share payload:", error);
+    throw new Error("Invalid share payload");
+  }
 };
 
 export const buildShareUrl = (
@@ -30,14 +35,18 @@ export const buildShareUrl = (
   extraParams?: Record<string, string>
 ) => {
   if (typeof window === "undefined") return encodedPayload;
-  const origin = window.location.origin;
-  const url = new URL(path, origin);
-  url.searchParams.set("data", encodedPayload);
-  if (extraParams) {
-    Object.entries(extraParams).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
-    });
+  try {
+    const origin = window.location.origin;
+    const url = new URL(path, origin);
+    url.searchParams.set("data", encodedPayload);
+    if (extraParams) {
+      Object.entries(extraParams).forEach(([key, value]) => {
+        url.searchParams.set(key, value);
+      });
+    }
+    return url.toString();
+  } catch (error) {
+    console.error("Failed to build share URL:", error);
+    throw new Error("Failed to create share link");
   }
-  return url.toString();
 };
-

@@ -265,7 +265,7 @@ export default function Home() {
                       ? "portfolio-preview"
                       : "resume-preview"
                   }
-                  className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-3"
+                  className="overflow-hidden bg-white/5 p-0 w-full"
                 >
                   {renderPreview(activeTemplate)}
                 </div>
@@ -273,7 +273,7 @@ export default function Home() {
                   <div className="mt-4 rounded-2xl border border-dashed border-white/30 bg-white/5 p-3 text-xs">
                     <p className="text-white/70">Shareable link</p>
                     <p className="truncate text-white">
-                      <a className="underline" href={shareUrl} target="_blank">
+                      <a className="underline" href={shareUrl} target="_blank" rel="noopener noreferrer">
                         {shareUrl}
                       </a>
                     </p>

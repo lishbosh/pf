@@ -41,8 +41,8 @@ const SharePageInner = () => {
 
   if (error || !payload) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-white text-slate-900">
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm max-w-md w-full mx-4">
+      <main className="flex min-h-screen items-center justify-center bg-white text-slate-900 p-4">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 text-center shadow-sm max-w-md w-full">
           <p className="text-lg font-semibold text-red-600">Error</p>
           <p className="text-sm text-gray-600 mt-2">{error}</p>
           <p className="text-xs text-gray-500 mt-4">Ask the sender for a fresh link.</p>
@@ -61,7 +61,7 @@ const SharePageInner = () => {
           (t) => t.id === portfolioPayload.data.templateId
         ) ?? portfolioTemplates[0];
       return (
-        <div className="w-full bg-white">
+        <div className="w-full max-w-none">
           <PortfolioPreview
             data={portfolioPayload.data.data}
             template={template}
@@ -77,7 +77,7 @@ const SharePageInner = () => {
     // Use professional white template if selected
     if (template.id === "professional-white") {
       return (
-        <div className="w-full bg-white">
+        <div className="w-full max-w-none">
           <ProfessionalWhiteResumePreview 
             data={resumePayload.data.data} 
             template={template} 
@@ -87,15 +87,15 @@ const SharePageInner = () => {
     }
     
     return (
-      <div className="w-full bg-white">
+      <div className="w-full max-w-none">
         <ResumePreview data={resumePayload.data.data} template={template} />
       </div>
     );
   };
 
   return (
-    <main className="min-h-screen bg-white py-0 text-slate-900">
-      <div className="w-full px-0">
+    <main className="min-h-screen bg-white py-0 text-slate-900 w-full max-w-none overflow-x-hidden">
+      <div className="w-full max-w-none px-0 mx-0">
         {renderSharedPreview()}
       </div>
     </main>

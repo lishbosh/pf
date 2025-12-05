@@ -128,15 +128,43 @@ export default function Home() {
 
   const handleExport = async () => {
     try {
+      // Validate that we have content to export
+      if (mode === "resume" && (!resumeData.personal.fullName || resumeData.personal.fullName.trim() === "")) {
+        alert("Please enter your name before exporting to PDF.");
+        return;
+      }
+      
+      if (mode === "portfolio" && (!portfolioData.title || portfolioData.title.trim() === "")) {
+        alert("Please enter a portfolio title before exporting to PDF.");
+        return;
+      }
+
       const id =
         mode === "portfolio" ? "portfolio-preview" : "resume-preview";
+      
+      // Check if preview element exists
+      const previewElement = document.getElementById(id);
+      if (!previewElement) {
+        alert("Preview not found. Please make sure the preview is visible before exporting.");
+        return;
+      }
+
+      // Check if preview has content
+      if (previewElement.children.length === 0) {
+        alert("Preview is empty. Please add some content before exporting.");
+        return;
+      }
+
+      // Wait a moment for any dynamic content to load
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       await exportSectionAsPdf(
         id,
         mode === "portfolio" ? "portfolio.pdf" : "resume.pdf"
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error("Export failed:", error);
-      alert("Failed to export PDF. Please make sure all fields are filled correctly and try again.");
+      alert(error.message || "Failed to export PDF. Please make sure all fields are filled correctly and try again.");
     }
   };
 

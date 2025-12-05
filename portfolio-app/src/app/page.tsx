@@ -127,7 +127,28 @@ export default function Home() {
   };
 
   const handlePrint = () => {
-    window.print();
+    try {
+      // Prepare data for printing
+      const printData = mode === "portfolio" 
+        ? {
+            templateId: portfolioTemplateId,
+            data: portfolioData
+          }
+        : {
+            templateId: resumeTemplateId,
+            data: resumeData
+          };
+      
+      // Encode data for URL
+      const encodedData = btoa(JSON.stringify(printData));
+      const printUrl = `/print?data=${encodeURIComponent(encodedData)}&mode=${mode}`;
+      
+      // Open print page in new tab
+      window.open(printUrl, '_blank');
+    } catch (error) {
+      console.error("Print preparation failed:", error);
+      alert("Failed to prepare print preview. Please try again.");
+    }
   };
 
   const handleExport = async () => {

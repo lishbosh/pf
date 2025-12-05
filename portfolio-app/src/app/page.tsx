@@ -126,6 +126,10 @@ export default function Home() {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const handleExport = async () => {
     try {
       // Validate that we have content to export
@@ -228,7 +232,7 @@ export default function Home() {
                 </p>
                 <h1 className="text-3xl font-bold">Creator Command Center</h1>
                 <p className="text-sm text-white/70">
-                  Pick a template, fill once, export PDF or share a live link.
+                  Pick a template, fill once, export PDF or print.
                 </p>
               </div>
               <div className="rounded-full bg-white/10 p-1">
@@ -281,9 +285,9 @@ export default function Home() {
                     </button>
                     <button
                       className="rounded-full border border-white/30 px-4 py-2 text-xs font-semibold text-white"
-                      onClick={handleShare}
+                      onClick={handlePrint}
                     >
-                      Share link
+                      Print
                     </button>
                   </div>
                 </div>
@@ -297,16 +301,6 @@ export default function Home() {
                 >
                   {renderPreview(activeTemplate)}
                 </div>
-                {shareUrl && (
-                  <div className="mt-4 rounded-2xl border border-dashed border-white/30 bg-white/5 p-3 text-xs">
-                    <p className="text-white/70">Shareable link</p>
-                    <p className="truncate text-white">
-                      <a className="underline" href={shareUrl} target="_blank" rel="noopener noreferrer">
-                        {shareUrl}
-                      </a>
-                    </p>
-                  </div>
-                )}
               </section>
               <BackupPanel
                 portfolio={portfolioData}

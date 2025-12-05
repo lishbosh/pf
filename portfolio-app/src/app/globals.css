@@ -24,3 +24,58 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Hide UI elements when printing */
+  header, 
+  .rounded-3xl, 
+  .border, 
+  .bg-white\/5, 
+  .text-white,
+  .text-white\/70,
+  .text-white\/60,
+  .text-white\/50 {
+    background: white !important;
+    color: black !important;
+    border-color: #ccc !important;
+  }
+  
+  /* Ensure proper contrast for printed content */
+  h1, h2, h3, h4, h5, h6 {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Remove shadows and rounded corners for clean print */
+  * {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    text-shadow: none !important;
+  }
+  
+  /* Hide buttons and interactive elements */
+  button, 
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  /* Ensure full width for printed content */
+  .w-full {
+    width: 100% !important;
+  }
+  
+  /* Remove padding and margins for clean print layout */
+  .p-0, .m-0 {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}

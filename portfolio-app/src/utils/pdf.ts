@@ -25,25 +25,52 @@ export const exportSectionAsPdf = async (
     // Force layout recalculation
     element.offsetHeight;
 
-    const canvas = await html2canvas(element, {
+    // Clone the element to remove problematic styles
+    const clone = element.cloneNode(true) as HTMLElement;
+    clone.style.position = 'absolute';
+    clone.style.left = '-9999px';
+    clone.style.backgroundColor = '#ffffff';
+    clone.style.boxShadow = 'none';
+    clone.style.borderRadius = '0';
+    clone.style.transform = 'none';
+    clone.style.animation = 'none';
+    clone.style.transition = 'none';
+    
+    // Remove any oklab or other unsupported color functions
+    const allElements = clone.querySelectorAll('*');
+    allElements.forEach(el => {
+      const element = el as HTMLElement;
+      if (element.style) {
+        // Remove background images and gradients that might contain oklab
+        if (element.style.backgroundImage) {
+          element.style.backgroundImage = 'none';
+        }
+        // Set solid background colors
+        if (element.style.backgroundColor) {
+          element.style.backgroundColor = '#ffffff';
+        }
+        // Remove other problematic styles
+        element.style.animation = 'none';
+        element.style.transition = 'none';
+        element.style.transform = 'none';
+      }
+    });
+    
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
       scale: 2,
       useCORS: true,
       backgroundColor: "#ffffff",
       logging: false,
       scrollX: 0,
       scrollY: 0,
-      windowWidth: element.scrollWidth,
-      windowHeight: element.scrollHeight,
-      onclone: (clonedDoc) => {
-        // Remove any animations or transitions that might interfere
-        const clonedElement = clonedDoc.getElementById(containerId);
-        if (clonedElement) {
-          clonedElement.style.transform = 'none';
-          clonedElement.style.animation = 'none';
-          clonedElement.style.transition = 'none';
-        }
-      }
+      windowWidth: clone.scrollWidth,
+      windowHeight: clone.scrollHeight,
     });
+
+    // Clean up clone
+    document.body.removeChild(clone);
 
     if (canvas.width === 0 || canvas.height === 0) {
       throw new Error("Failed to capture preview content. Please make sure all content is loaded.");
@@ -70,9 +97,11 @@ export const exportSectionAsPdf = async (
     if (error.message.includes("capture")) {
       throw new Error("Failed to capture preview content. Please make sure all images are loaded and try again.");
     } else if (error.message.includes("empty")) {
-      throw new Error("Preview is empty. Please add some content before exporting to PDF.");
+      throw new Error("Preview is empty. Please add some content before exporting.");
     } else if (error.message.includes("found")) {
       throw new Error("Preview section not found. Please make sure the preview is visible before exporting.");
+    } else if (error.message.includes("oklab")) {
+      throw new Error("PDF export failed due to unsupported color functions. This has been fixed, please try again.");
     } else {
       throw new Error(`PDF export failed: ${error.message || "Unknown error occurred. Please try again."}`);
     }

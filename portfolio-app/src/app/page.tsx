@@ -6,6 +6,7 @@ import { ResumeForm } from "@/components/forms/ResumeForm";
 import { TemplateSelector } from "@/components/templates/TemplateSelector";
 import { PortfolioPreview } from "@/components/preview/PortfolioPreview";
 import { ResumePreview } from "@/components/preview/ResumePreview";
+import { ProfessionalWhiteResumePreview } from "@/components/preview/ProfessionalWhiteResumePreview";
 import { ReminderBanner } from "@/components/ui/ReminderBanner";
 import { TutorialOverlay } from "@/components/ui/TutorialOverlay";
 import { BackupPanel } from "@/components/settings/BackupPanel";
@@ -152,6 +153,8 @@ export default function Home() {
         template={template}
         profilePhotoUrl={profilePhotoPreview}
       />
+    ) : template.id === "professional-white" ? (
+      <ProfessionalWhiteResumePreview data={resumeData} template={template} />
     ) : (
       <ResumePreview data={resumeData} template={template} />
     );

@@ -4,6 +4,7 @@ import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { PortfolioPreview } from "@/components/preview/PortfolioPreview";
 import { ResumePreview } from "@/components/preview/ResumePreview";
+import { ProfessionalWhiteResumePreview } from "@/components/preview/ProfessionalWhiteResumePreview";
 import { portfolioTemplates, resumeTemplates } from "@/data/templates";
 import { PortfolioData, ResumeData } from "@/types/forms";
 import { decodeSharePayload } from "@/utils/share";
@@ -49,28 +50,39 @@ const SharePageInner = () => {
   }
 
   const renderSharedPreview = () => {
-  if (mode === "portfolio") {
-    const portfolioPayload = payload as {
-      data: PortfolioSharePayload;
-    };
+    if (mode === "portfolio") {
+      const portfolioPayload = payload as {
+        data: PortfolioSharePayload;
+      };
+      const template =
+        portfolioTemplates.find(
+          (t) => t.id === portfolioPayload.data.templateId
+        ) ?? portfolioTemplates[0];
+      return (
+        <PortfolioPreview
+          data={portfolioPayload.data.data}
+          template={template}
+        />
+      );
+    }
+    const resumePayload = payload as { data: ResumeSharePayload };
     const template =
-      portfolioTemplates.find(
-        (t) => t.id === portfolioPayload.data.templateId
-      ) ?? portfolioTemplates[0];
+      resumeTemplates.find((t) => t.id === resumePayload.data.templateId) ??
+      resumeTemplates[0];
+      
+    // Use professional white template if selected
+    if (template.id === "professional-white") {
+      return (
+        <ProfessionalWhiteResumePreview 
+          data={resumePayload.data.data} 
+          template={template} 
+        />
+      );
+    }
+    
     return (
-      <PortfolioPreview
-        data={portfolioPayload.data.data}
-        template={template}
-      />
+      <ResumePreview data={resumePayload.data.data} template={template} />
     );
-  }
-  const resumePayload = payload as { data: ResumeSharePayload };
-  const template =
-    resumeTemplates.find((t) => t.id === resumePayload.data.templateId) ??
-    resumeTemplates[0];
-  return (
-    <ResumePreview data={resumePayload.data.data} template={template} />
-  );
   };
 
   return (
@@ -108,4 +120,3 @@ const SharePage = () => {
 };
 
 export default SharePage;
-

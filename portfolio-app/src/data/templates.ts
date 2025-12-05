@@ -85,6 +85,14 @@ export const portfolioTemplates: TemplateMeta[] = [
 
 export const resumeTemplates: TemplateMeta[] = [
   {
+    id: "professional-white",
+    name: "Professional White",
+    accent: "#2563eb",
+    background: "#ffffff",
+    description: "Clean, professional white background resume optimized for ATS.",
+    layout: "columns",
+  },
+  {
     id: "linen",
     name: "Linen Classic",
     accent: "#0f172a",
@@ -165,4 +173,3 @@ export const resumeTemplates: TemplateMeta[] = [
     layout: "stacked",
   },
 ];
-

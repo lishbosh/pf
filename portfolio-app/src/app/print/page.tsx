@@ -24,7 +24,7 @@ export default function PrintPage() {
       }
 
       // Decode the data
-      const decoded = atob(encoded);
+      const decoded = atob(decodeURIComponent(encoded));
       const parsed = JSON.parse(decoded);
       
       setData({
@@ -44,17 +44,17 @@ export default function PrintPage() {
 
   if (error) {
     return (
-      <div className="p-4 text-center">
-        <h1 className="text-red-600 text-xl">Error</h1>
-        <p className="text-gray-700">{error}</p>
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <h1 style={{ color: '#dc2626', fontSize: '1.25rem' }}>Error</h1>
+        <p style={{ color: '#374151' }}>{error}</p>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="p-4 text-center">
-        <p className="text-gray-700">Loading print preview...</p>
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <p style={{ color: '#374151' }}>Loading print preview...</p>
       </div>
     );
   }
@@ -63,7 +63,7 @@ export default function PrintPage() {
     if (data.mode === "portfolio") {
       const template = portfolioTemplates.find(t => t.id === data.payload.templateId) || portfolioTemplates[0];
       return (
-        <div className="w-full max-w-4xl mx-auto p-4 bg-white">
+        <div style={{ width: '100%', maxWidth: '64rem', margin: '0 auto', padding: '1rem', backgroundColor: 'white' }}>
           <PortfolioPreview 
             data={data.payload.data} 
             template={template} 
@@ -74,7 +74,7 @@ export default function PrintPage() {
       const template = resumeTemplates.find(t => t.id === data.payload.templateId) || resumeTemplates[0];
       if (template.id === "professional-white") {
         return (
-          <div className="w-full max-w-4xl mx-auto p-0 bg-white">
+          <div style={{ width: '100%', maxWidth: '64rem', margin: '0 auto', padding: '0', backgroundColor: 'white' }}>
             <ProfessionalWhiteResumePreview 
               data={data.payload.data} 
               template={template} 
@@ -83,7 +83,7 @@ export default function PrintPage() {
         );
       }
       return (
-        <div className="w-full max-w-4xl mx-auto p-0 bg-white">
+        <div style={{ width: '100%', maxWidth: '64rem', margin: '0 auto', padding: '0', backgroundColor: 'white' }}>
           <ResumePreview 
             data={data.payload.data} 
             template={template} 
@@ -94,13 +94,13 @@ export default function PrintPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white p-0 print:p-0">
-      <div className="print-container w-full max-w-none mx-0 px-0">
+    <div style={{ width: '100%', minHeight: '100vh', backgroundColor: 'white', padding: '0', margin: '0' }}>
+      <div style={{ width: '100%', maxWidth: 'none', margin: '0', padding: '0' }}>
         {renderPreview()}
       </div>
       
       {/* Print instructions for first load */}
-      <div className="hidden print:block fixed bottom-4 right-4 text-xs text-gray-500">
+      <div style={{ display: 'none', position: 'fixed', bottom: '1rem', right: '1rem', fontSize: '0.75rem', color: '#6b7280' }}>
         Press Ctrl+P (Windows) or Cmd+P (Mac) to print
       </div>
     </div>

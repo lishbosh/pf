@@ -10,15 +10,22 @@ type ProfessionalWhiteResumePreviewProps = {
 export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalWhiteResumePreviewProps) => {
   return (
     <div 
-      className="w-full bg-white p-8 text-slate-900 print:p-8 print:m-0"
-      style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '100%', margin: '0 auto' }}
+      style={{ 
+        width: '100%', 
+        backgroundColor: '#ffffff', 
+        padding: '2rem', 
+        color: '#1e293b',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        maxWidth: '100%',
+        margin: '0 auto'
+      }}
     >
       {/* Header */}
-      <header className="border-b border-gray-300 pb-4 print:border-b print:border-gray-300">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-slate-900 print:text-3xl">{data.personal.fullName}</h1>
-          <p className="text-lg font-semibold text-blue-700 mt-1 print:text-lg">{data.personal.headline}</p>
-          <div className="mt-2 flex justify-center flex-wrap gap-3 text-sm text-slate-600 print:text-sm">
+      <header style={{ borderBottom: '1px solid #cbd5e1', paddingBottom: '1rem' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#0f172a' }}>{data.personal.fullName}</h1>
+          <p style={{ fontSize: '1.125rem', fontWeight: '600', color: '#2563eb', marginTop: '0.25rem' }}>{data.personal.headline}</p>
+          <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '0.75rem', fontSize: '0.875rem', color: '#64748b' }}>
             <span>{data.personal.email}</span>
             <span>|</span>
             <span>{data.personal.phone}</span>
@@ -30,21 +37,21 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
 
       {/* Summary */}
       {data.summary && (
-        <section className="mt-6 print:mt-6">
-          <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">PROFESSIONAL SUMMARY</h2>
-          <p className="mt-2 text-sm text-slate-700 print:text-sm">{data.summary}</p>
+        <section style={{ marginTop: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>PROFESSIONAL SUMMARY</h2>
+          <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#334155' }}>{data.summary}</p>
         </section>
       )}
 
-      <div className="mt-6 grid grid-cols-3 gap-6 print:mt-6 print:gap-6">
+      <div style={{ marginTop: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem' }}>
         {/* Left Column - Skills, Education, Certifications */}
-        <div className="col-span-1 space-y-6 print:space-y-6">
+        <div style={{ spaceY: '1.5rem' }}>
           {/* Skills */}
           <section>
-            <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">SKILLS</h2>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>SKILLS</h2>
+            <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
               {data.skills.map((skill, index) => (
-                <span key={index} className="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded print:text-xs print:px-2 print:py-1">
+                <span key={index} style={{ display: 'inline-block', backgroundColor: '#dbeafe', color: '#2563eb', fontSize: '0.75rem', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>
                   {skill}
                 </span>
               ))}
@@ -53,17 +60,17 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
 
           {/* Education */}
           <section>
-            <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">EDUCATION</h2>
-            <div className="mt-2 space-y-3 print:space-y-3">
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>EDUCATION</h2>
+            <div style={{ marginTop: '0.5rem', spaceY: '0.75rem' }}>
               {data.education.map((edu) => (
                 <div key={edu.id}>
-                  <p className="text-sm font-semibold text-slate-900 print:text-sm">{edu.degree}</p>
-                  <p className="text-xs text-slate-600 print:text-xs">{edu.school}</p>
-                  <p className="text-xs text-slate-600 print:text-xs">
+                  <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0f172a' }}>{edu.degree}</p>
+                  <p style={{ fontSize: '0.75rem', color: '#64748b' }}>{edu.school}</p>
+                  <p style={{ fontSize: '0.75rem', color: '#64748b' }}>
                     {edu.startDate} - {edu.endDate}
                   </p>
                   {edu.details && (
-                    <p className="text-xs text-slate-700 mt-1 print:text-xs">{edu.details}</p>
+                    <p style={{ fontSize: '0.75rem', color: '#334155', marginTop: '0.25rem' }}>{edu.details}</p>
                   )}
                 </div>
               ))}
@@ -73,11 +80,11 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
           {/* Certifications */}
           {data.certifications.length > 0 && (
             <section>
-              <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">CERTIFICATIONS</h2>
-              <ul className="mt-2 space-y-1 print:space-y-1">
+              <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>CERTIFICATIONS</h2>
+              <ul style={{ marginTop: '0.5rem', spaceY: '0.25rem' }}>
                 {data.certifications.map((cert) => (
-                  <li key={cert.id} className="text-sm text-slate-700 print:text-sm">
-                    <span className="font-semibold">{cert.name}</span> - {cert.issuer} ({cert.year})
+                  <li key={cert.id} style={{ fontSize: '0.875rem', color: '#334155' }}>
+                    <span style={{ fontWeight: '600' }}>{cert.name}</span> - {cert.issuer} ({cert.year})
                   </li>
                 ))}
               </ul>
@@ -87,30 +94,30 @@ export const ProfessionalWhiteResumePreview = ({ data, template }: ProfessionalW
           {/* Languages */}
           {data.languages.length > 0 && (
             <section>
-              <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">LANGUAGES</h2>
-              <p className="mt-2 text-sm text-slate-700 print:text-sm">{data.languages.join(", ")}</p>
+              <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>LANGUAGES</h2>
+              <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#334155' }}>{data.languages.join(", ")}</p>
             </section>
           )}
         </div>
 
         {/* Right Column - Experience */}
-        <div className="col-span-2">
+        <div>
           <section>
-            <h2 className="text-lg font-bold text-slate-900 border-b border-gray-300 pb-1 print:text-lg print:border-b print:border-gray-300">PROFESSIONAL EXPERIENCE</h2>
-            <div className="mt-2 space-y-4 print:space-y-4">
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#0f172a', borderBottom: '1px solid #cbd5e1', paddingBottom: '0.25rem' }}>PROFESSIONAL EXPERIENCE</h2>
+            <div style={{ marginTop: '0.5rem', spaceY: '1rem' }}>
               {data.experiences.map((experience) => (
                 <div key={experience.id}>
-                  <div className="flex justify-between">
-                    <p className="text-sm font-bold text-slate-900 print:text-sm">{experience.role}</p>
-                    <p className="text-sm text-slate-600 print:text-sm">
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <p style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#0f172a' }}>{experience.role}</p>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
                       {experience.startDate} - {experience.endDate}
                     </p>
                   </div>
-                  <p className="text-sm font-semibold text-blue-700 print:text-sm">{experience.company}</p>
-                  <ul className="mt-1 space-y-1">
+                  <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#2563eb' }}>{experience.company}</p>
+                  <ul style={{ marginTop: '0.25rem', spaceY: '0.25rem' }}>
                     {experience.description.split('\n').map((line, index) => (
-                      <li key={index} className="text-sm text-slate-700 flex print:text-sm">
-                        <span className="mr-2">•</span>
+                      <li key={index} style={{ fontSize: '0.875rem', color: '#334155', display: 'flex' }}>
+                        <span style={{ marginRight: '0.5rem' }}>•</span>
                         <span>{line}</span>
                       </li>
                     ))}

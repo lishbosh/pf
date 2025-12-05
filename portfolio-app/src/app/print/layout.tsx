@@ -14,38 +14,42 @@ export default function PrintLayout({
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
-      <body style={{ 
-        margin: 0, 
-        padding: 0, 
-        backgroundColor: 'white',
-        color: 'black',
-        fontFamily: 'Arial, Helvetica, sans-serif'
-      }}>
-        {children}
-        <style jsx global>{`
-          @media print {
+        <style>
+          {`
             body {
               margin: 0;
               padding: 0;
-              background: white;
+              background-color: white;
               color: black;
+              font-family: Arial, Helvetica, sans-serif;
             }
             
-            * {
-              box-shadow: none !important;
-              border-radius: 0 !important;
-              text-shadow: none !important;
+            @media print {
+              body {
+                margin: 0;
+                padding: 0;
+                background: white;
+                color: black;
+              }
+              
+              * {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                text-shadow: none !important;
+              }
+              
+              .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+              }
             }
-            
-            .print-container {
-              width: 100% !important;
-              max-width: 100% !important;
-              margin: 0 !important;
-              padding: 0 !important;
-            }
-          }
-        `}</style>
+          `}
+        </style>
+      </head>
+      <body>
+        {children}
       </body>
     </html>
   );

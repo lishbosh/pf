@@ -3,17 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.myportfolio.app',
   appName: 'portfolio-app',
-  webDir: 'out',
-  server: {
-    androidScheme: 'https',
-    hostname: 'localhost',
-    iosScheme: 'https',
-    cleartext: false,
-    url: 'index.html'
-  },
-  android: {
-    webContentsDebuggingEnabled: true
-  }
+  webDir: 'out'
 };
 
 export default config;

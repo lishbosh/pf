@@ -140,37 +140,3 @@ export default function PrintPage() {
 
 // Add dynamic export to prevent prerendering
 export const dynamic = "force-dynamic";
-          />
-        </div>
-      );
-    }
-  };
-
-  return (
-    <div style={{ width: '100%', minHeight: '100vh', backgroundColor: 'white', padding: '0', margin: '0' }}>
-      <div style={{ width: '100%', maxWidth: 'none', margin: '0', padding: '0' }}>
-        {renderPreview()}
-      </div>
-      
-      {/* Print instructions for first load */}
-      <div style={{ display: 'none', position: 'fixed', bottom: '1rem', right: '1rem', fontSize: '0.75rem', color: '#6b7280' }}>
-        Press Ctrl+P (Windows) or Cmd+P (Mac) to print
-      </div>
-    </div>
-  );
-};
-
-export default function PrintPage() {
-  return (
-    <Suspense fallback={
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <p style={{ color: '#374151' }}>Loading print preview...</p>
-      </div>
-    }>
-      <PrintPageInner />
-    </Suspense>
-  );
-}
-
-// Add dynamic export to prevent prerendering
-export const dynamic = "force-dynamic";

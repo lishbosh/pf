@@ -339,4 +339,3 @@ export default function Home() {
     </>
   );
 }
-}

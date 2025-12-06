@@ -128,20 +128,21 @@ export default function Home() {
 
   const handlePrint = () => {
     try {
-      // Prepare data for printing
-      const printData = mode === "portfolio" 
-        ? {
-            templateId: portfolioTemplateId,
-            data: portfolioData
-          }
-        : {
-            templateId: resumeTemplateId,
-            data: resumeData
-          };
+      // Prepare data for printing using the same structure as share
+      const payload =
+        mode === "portfolio"
+          ? {
+              templateId: portfolioTemplateId,
+              data: portfolioData,
+            }
+          : {
+              templateId: resumeTemplateId,
+              data: resumeData,
+            };
       
-      // Encode data for URL
-      const encodedData = btoa(JSON.stringify(printData));
-      const printUrl = `/print?data=${encodeURIComponent(encodedData)}&mode=${mode}`;
+      // Use the same encoding method as share to ensure consistency
+      const encodedData = encodeSharePayload(payload);
+      const printUrl = `/print?data=${encodedData}&mode=${mode}`;
       
       // Open print page in new tab
       window.open(printUrl, '_blank');
@@ -337,4 +338,5 @@ export default function Home() {
       </main>
     </>
   );
+}
 }

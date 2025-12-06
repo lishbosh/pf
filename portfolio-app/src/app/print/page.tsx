@@ -1,13 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { PortfolioPreview } from "@/components/preview/PortfolioPreview";
 import { ResumePreview } from "@/components/preview/ResumePreview";
 import { ProfessionalWhiteResumePreview } from "@/components/preview/ProfessionalWhiteResumePreview";
 import { portfolioTemplates, resumeTemplates } from "@/data/templates";
+import { decodeSharePayload } from "@/utils/share";
 
-export default function PrintPage() {
+// Define payload types
+type PortfolioSharePayload = {
+  templateId: string;
+  data: any;
+};
+
+type ResumeSharePayload = {
+  templateId: string;
+  data: any;
+};
+
+const PrintPageInner = () => {
   const params = useSearchParams();
   const [data, setData] = useState<{mode: string; payload: any} | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -22,14 +34,20 @@ export default function PrintPage() {
         return;
       }
 
-      // Decode the data
-      const decoded = atob(decodeURIComponent(encoded));
-      const parsed = JSON.parse(decoded);
-      
-      setData({
-        mode,
-        payload: parsed
-      });
+      // Use the same decoding method as the share page
+      if (mode === "portfolio") {
+        const decoded = decodeSharePayload<PortfolioSharePayload>(encoded);
+        setData({
+          mode,
+          payload: decoded.data
+        });
+      } else {
+        const decoded = decodeSharePayload<ResumeSharePayload>(encoded);
+        setData({
+          mode,
+          payload: decoded.data
+        });
+      }
       
       // Automatically trigger print after a short delay
       setTimeout(() => {
@@ -39,7 +57,7 @@ export default function PrintPage() {
       }, 1000);
     } catch (err) {
       console.error("Print page error:", err);
-      setError("Failed to load print data");
+      setError("Failed to load print data. The link may be invalid or corrupted.");
     }
   }, [params]);
 
@@ -53,7 +71,11 @@ export default function PrintPage() {
   }
 
   if (!data) {
-    return null; // Let the loading component handle this
+    return (
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <p style={{ color: '#374151' }}>Loading print preview...</p>
+      </div>
+    );
   }
 
   const renderPreview = () => {
@@ -101,6 +123,52 @@ export default function PrintPage() {
         Press Ctrl+P (Windows) or Cmd+P (Mac) to print
       </div>
     </div>
+  );
+};
+
+export default function PrintPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <p style={{ color: '#374151' }}>Loading print preview...</p>
+      </div>
+    }>
+      <PrintPageInner />
+    </Suspense>
+  );
+}
+
+// Add dynamic export to prevent prerendering
+export const dynamic = "force-dynamic";
+          />
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div style={{ width: '100%', minHeight: '100vh', backgroundColor: 'white', padding: '0', margin: '0' }}>
+      <div style={{ width: '100%', maxWidth: 'none', margin: '0', padding: '0' }}>
+        {renderPreview()}
+      </div>
+      
+      {/* Print instructions for first load */}
+      <div style={{ display: 'none', position: 'fixed', bottom: '1rem', right: '1rem', fontSize: '0.75rem', color: '#6b7280' }}>
+        Press Ctrl+P (Windows) or Cmd+P (Mac) to print
+      </div>
+    </div>
+  );
+};
+
+export default function PrintPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <p style={{ color: '#374151' }}>Loading print preview...</p>
+      </div>
+    }>
+      <PrintPageInner />
+    </Suspense>
   );
 }
 

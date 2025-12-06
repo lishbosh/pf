@@ -61,26 +61,4 @@ export const exportSectionAsPdf = async (
       throw new Error(`PDF export failed: ${error.message || "Unknown error occurred. Please try again."}`);
     }
   }
-};    unit: "px",
-      format: [canvas.width, canvas.height]
-    });
-
-    // Add image to PDF
-    const imgData = canvas.toDataURL("image/png");
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-    
-    // Save PDF
-    pdf.save(filename);
-  } catch (error: any) {
-    console.error("PDF export error:", error);
-    
-    // Provide more specific error messages
-    if (error.message.includes("dimension")) {
-      throw new Error("Preview content is not visible. Please make sure the preview is displayed before exporting.");
-    } else if (error.message.includes("capture")) {
-      throw new Error("Failed to capture preview content. Please make sure all content is loaded and try again.");
-    } else {
-      throw new Error(`PDF export failed: ${error.message || "Unknown error occurred. Please try again."}`);
-    }
-  }
 };
